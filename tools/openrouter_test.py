@@ -28,9 +28,9 @@ except Exception as e:
 data = resp.json().get("data", [])
 kimi_models = [m["id"] for m in data if "kimi" in m.get("id","").lower()]
 
-if kimi_models:
-    MODEL = kimi_models[0]   # choose first match
-    print("Using model:", MODEL)
-else:
-    MODEL = "llama3.2:latest"  # fallback
-    print("Kimi not found — using fallback:", MODEL)
+API_KEY = os.getenv("OPENROUTER_API_KEY")
+BASE_URL = "https://openrouter.ai/api/v1"
+resp = requests.get(f"{BASE_URL}/models", headers={"Authorization": f"Bearer {API_KEY}"})
+resp.raise_for_status()
+for m in resp.json().get("data", []):
+    print(m.get("id"))
