@@ -24,4 +24,13 @@ except Exception as e:
     print(resp.text)
     raise
 
-pprint.pp(resp.json())
+# pprint.pp(resp.json())
+data = resp.json().get("data", [])
+kimi_models = [m["id"] for m in data if "kimi" in m.get("id","").lower()]
+
+if kimi_models:
+    MODEL = kimi_models[0]   # choose first match
+    print("Using model:", MODEL)
+else:
+    MODEL = "llama3.2:latest"  # fallback
+    print("Kimi not found — using fallback:", MODEL)
